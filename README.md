@@ -1,3 +1,18 @@
+I would like a version of Prosit I can use programmatically from within Python instead of 
+using a Docker container. I can't use Docker on many HPCs. Perhaps I will accomplish this.
+
+Things to do:
+
+1. The package is built on tensorflow v1. It is solid as-is (since it is designed to run in Docker), but for 
+   use outside its intended Docker container this is difficult. v1 is not future-proof. v1 is not even very 
+   easy to install anymore, especially not 1.10.1 which requires Python <= 3.6.
+   - Migrate the package to TensorFlow v2. It uses Keras, so there might not be too much to do.
+   The only hurdle I see is in the server.py `__main__` section, which uses `tf.Session`. I'm probably 
+     missing other things too. Nothing is ever as easy as it seems it should be.
+2. Predictions seem to be made from within the server. At least, there are some variables that only get defined
+in the the `__main__` section of server.py.
+   - I need to instantiate things outside of server.py. Possibly we need a class object to store the 
+   instantiated predictor.
 
 # Prosit
 
