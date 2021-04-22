@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     d_spectra["graph"] = tf.Graph()
     with d_spectra["graph"].as_default():
-        d_spectra["session"] = tf.Session()
+        d_spectra["session"] = tf.compat.v1.Session()
         with d_spectra["session"].as_default():
             d_spectra["model"], d_spectra["config"] = model.load(
                 constants.MODEL_SPECTRA,
@@ -94,7 +94,7 @@ if __name__ == "__main__":
             d_spectra["model"].compile(optimizer="adam", loss="mse")
     d_irt["graph"] = tf.Graph()
     with d_irt["graph"].as_default():
-        d_irt["session"] = tf.Session()
+        d_irt["session"] = tf.compat.v1.Session()
         with d_irt["session"].as_default():
             d_irt["model"], d_irt["config"] = model.load(constants.MODEL_IRT,
                     trained=True)

@@ -46,7 +46,7 @@ def mask_outofcharge(array, charges, mask=-1.0):
 
 
 def get_spectral_angle(true, pred, batch_size=600):
-    import tensorflow
+    import tensorflow as tf
 
     n = true.shape[0]
     sa = numpy.zeros([n])
@@ -63,8 +63,8 @@ def get_spectral_angle(true, pred, batch_size=600):
             yield 0, true, pred
 
     for i, t_b, p_b in iterate():
-        tensorflow.reset_default_graph()
-        with tensorflow.Session() as s:
+        tf.compat.v1.reset_default_graph()
+        with tf.compat.v1.Session() as s:
             sa_graph = losses.masked_spectral_distance(t_b, p_b)
             sa_b = 1 - s.run(sa_graph)
             sa[i * batch_size : i * batch_size + sa_b.shape[0]] = sa_b
