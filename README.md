@@ -9,10 +9,16 @@ Things to do:
    - Migrate the package to TensorFlow v2. It uses Keras, so there might not be too much to do.
    The only hurdle I see is in the server.py `__main__` section, which uses `tf.Session`. I'm probably 
      missing other things too. Nothing is ever as easy as it seems it should be.
+   - **ran tf_upgrade_v2 on the prosit directory. It only had to change a few things, so I was mostly 
+     correct. Though, of course, I haven't actually been able to test anything yet.**
 2. Predictions seem to be made from within the server. At least, there are some variables that only get defined
 in the the `__main__` section of server.py.
    - I need to instantiate things outside of server.py. Possibly we need a class object to store the 
    instantiated predictor.
+3. Need to address this:
+   - `PermissionError: [Errno 13] Permission denied: '/root/model_spectra/'`
+   - Obviously it is not able to access that directory. Also, perhaps it will want to find models 
+   there? Also, obviously not there.
 
 # Prosit
 
