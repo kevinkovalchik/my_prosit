@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="prosit",
@@ -7,8 +7,9 @@ setup(
     url="http://github.com/kusterlab/prosit",
     author="Siegfried Gessulat",
     author_email="s.gessulat@gmail.com",
-    packages=["prosit"],
+    packages=find_packages(),
     zip_safe=False,
+    install_requires=['tensorflow', 'keras', 'pandas', 'h5py', 'tables', 'flask', 'pyteomics', 'lxml'],
     setup_requires=["pytest-runner"],
     tests_require=["pytest", "pylint"],
 )
