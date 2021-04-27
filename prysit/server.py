@@ -1,3 +1,7 @@
+'''
+This file modified by Kevin Kovalchik
+'''
+
 import os
 import tempfile
 import warnings
@@ -6,13 +10,13 @@ from flask import after_this_request
 import pandas as pd
 import tensorflow as tf
 
-from . import model
-from . import io_local
-from . import constants
-from . import tensorize
-from . import prediction
-from . import alignment
-from . import converters
+from prysit import model
+from prysit import io_local
+from prysit import constants
+from prysit import tensorize
+from prysit import prediction
+from prysit import alignment
+from prysit import converters
 
 
 app = flask.Flask(__name__)
@@ -77,6 +81,8 @@ def return_msms():
 
 
 if __name__ == "__main__":
+    if not tf.test.is_gpu_available():
+        tf.device('/cpu:0')
     warnings.filterwarnings("ignore")
     global d_spectra
     global d_irt
@@ -88,7 +94,7 @@ if __name__ == "__main__":
         d_spectra["session"] = tf.compat.v1.Session()
         with d_spectra["session"].as_default():
             d_spectra["model"], d_spectra["config"] = model.load(
-                constants.MODEL_SPECTRA,
+                constants.MODEL_TRYPTIC_SPECTRA_DIR,
                 trained=True
             )
             d_spectra["model"].compile(optimizer="adam", loss="mse")
@@ -96,7 +102,7 @@ if __name__ == "__main__":
     with d_irt["graph"].as_default():
         d_irt["session"] = tf.compat.v1.Session()
         with d_irt["session"].as_default():
-            d_irt["model"], d_irt["config"] = model.load(constants.MODEL_IRT,
-                    trained=True)
+            d_irt["model"], d_irt["config"] = model.load(constants.MODEL_IRT_DIR,
+                                                         trained=True)
             d_irt["model"].compile(optimizer="adam", loss="mse")
     app.run(host="0.0.0.0")

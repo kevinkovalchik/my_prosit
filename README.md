@@ -1,6 +1,9 @@
 I would like a version of Prosit I can use programmatically from within Python instead of 
 using a Docker container. I can't use Docker on many HPCs. Perhaps I will accomplish this.
 
+I have given it the silly name Prysit, which is sort of a combination of Python and Prosit. Doesn't really make 
+that much sense because Prosit is already written in Python, but whatever...
+
 Things to do:
 
 1. The package is built on tensorflow v1. It is solid as-is (since it is designed to run in Docker), but for 
@@ -11,14 +14,24 @@ Things to do:
      missing other things too. Nothing is ever as easy as it seems it should be.
    - **ran tf_upgrade_v2 on the prosit directory. It only had to change a few things, so I was mostly 
      correct. Though, of course, I haven't actually been able to test anything yet.**
+   - **changed a few things to use the `compat.v1` stuff**
+   - **after the above changes, the server now runs outisde of Docker by invoking `python -m prysit.server`**
+   - **made a version of the model.yml files which will work on CPU, so we no longer need GPUs to run it.**
 2. Predictions seem to be made from within the server. At least, there are some variables that only get defined
 in the the `__main__` section of server.py.
    - I need to instantiate things outside of server.py. Possibly we need a class object to store the 
    instantiated predictor.
-3. Need to address this:
-   - `PermissionError: [Errno 13] Permission denied: '/root/model_spectra/'`
-   - Obviously it is not able to access that directory. Also, perhaps it will want to find models 
-   there? Also, obviously not there.
+   - **Wrote a `Predictor` class which compiles the needed tf graphs. Had to add some functions to `tensorize.py`
+   and `convert`. You can make predictions programmatically using the `Predictor` class.**
+
+New things added so far:
+- Added a `download_models` function to utils.py which downloads and extracts the Prosit models into a "models"
+directory inside the `prysit` directory (i.e. in `site-packages`)
+- Wrote a `spectra_compare` class. This takes the path to an MzML file as input. It has some functions, the most useful
+  of which you give a scan number and a peptide sequence (and a collision energy and charge), and it predicts the 
+  fragment ions arising from that sequence and calculate the normalized spectra contrast angle between them and the
+  actual observed spectrum. Interestingly, you can give it multiple peptides which it scores against the same spectrum
+  simultaneously (as if it were a chimeric spectrum). Not sure if that is useful as is, but its interesting.
 
 # Prosit
 

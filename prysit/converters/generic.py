@@ -27,7 +27,51 @@ FragmentType = FragmentType.flatten()
 FragmentCharge = FragmentCharge.flatten()
 
 
+def convert_multiple_spectra(data):
+    # modified from "convert_spectrum" by Kevin Kovalchik to simplify getting a dataframe from the prediction.
+    out_df = pd.DataFrame()
+    for i in range(data['intensities_pred'].shape[0]):
+        df = pd.DataFrame(
+            {
+                "RelativeIntensity": data["intensities_pred"][i, :],
+                "FragmentMz": data["masses_pred"][i, :],
+                "idx": list(range(174)),
+            }
+        )
+        spectrum = df[df.RelativeIntensity > 0].reset_index(drop=True)
+        idx = list(spectrum.idx)
+        sequence = utils.get_sequence(data["sequence_integer"][i])
+        charge = int(data["precursor_charge_onehot"][i].argmax() + 1)
+        irt = float(data["iRT"][i])
+        precursor_mz = pyteomics.mass.calculate_mass(
+            sequence=sequence.replace("M(ox)", "oM"), charge=charge, aa_comp=aa_comp
+        )
+
+        spectrum["ModifiedPeptide"] = sequence
+        spectrum["LabeledPeptide"] = sequence
+        spectrum["StrippedPeptide"] = spectrum.LabeledPeptide.map(
+            lambda p: p.replace("M(ox)", "M")
+        )
+        spectrum["PrecursorCharge"] = charge
+        spectrum["PrecursorMz"] = precursor_mz
+        spectrum["iRT"] = irt
+        spectrum["FragmentNumber"] = FragmentNumber[idx]
+        spectrum["FragmentType"] = FragmentType[idx]
+        spectrum["FragmentCharge"] = FragmentCharge[idx]
+        spectrum["FragmentLossType"] = "noloss"
+        for source, target in translate2spectronaut.items():
+            spectrum["ModifiedPeptide"] = spectrum.ModifiedPeptide.map(
+                lambda s: s.replace(source, target)
+            )
+        spectrum["ModifiedPeptide"] = spectrum.ModifiedPeptide.map(lambda s: "_" + s + "_")
+        del spectrum["idx"]
+        out_df = pd.concat([out_df, spectrum], ignore_index=True)
+        out_df.reset_index(inplace=True, drop=True)
+    return out_df
+
+
 def convert_spectrum(data):
+
     df = pd.DataFrame(
         {
             "RelativeIntensity": data["intensities_pred"],
@@ -66,7 +110,7 @@ def convert_spectrum(data):
 
 
 class Converter:
-    def __init__(self, data, out_path, maxsize=256, batch_size=32):
+    def __init__(self, data, out_path=None, maxsize=256, batch_size=32):  # Kevin Kovalchik changed out_put to default of None
         self.data = data
         self.out_path = out_path
         self.queue = mp.Manager().Queue(maxsize)

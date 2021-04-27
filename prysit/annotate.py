@@ -1,7 +1,7 @@
 import numpy
 import collections
-from .constants import AMINO_ACID, PROTON, ION_OFFSET, FORWARD, BACKWARD
-from . import constants
+from prysit.constants import AMINO_ACID, PROTON, ION_OFFSET, FORWARD, BACKWARD
+from prysit import constants
 
 
 def adjust_masses(method):

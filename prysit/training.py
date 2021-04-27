@@ -1,9 +1,9 @@
 import os
 
-from . import io_local
-from . import losses
-from . import model as model_lib
-from . import constants
+from prysit import io_local
+from prysit import losses
+from prysit import model as model_lib
+from prysit import constants
 
 
 def get_callbacks(model_dir_path):

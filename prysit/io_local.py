@@ -1,4 +1,4 @@
-from . import utils
+from prysit import utils
 
 
 def get_array(tensor, keys):

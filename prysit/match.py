@@ -1,7 +1,7 @@
 import numpy
 
-from . import annotate
-from . import constants
+from prysit import annotate
+from prysit import constants
 
 
 def read_attribute(row, attribute):

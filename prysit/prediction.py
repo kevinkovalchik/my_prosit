@@ -1,18 +1,19 @@
 import os
 import keras
 import numpy as np
+import tensorflow as tf
 
-from . import model as model_lib
-from . import io_local
-from . import constants
-from . import sanitize
+from prysit import model as model_lib
+from prysit import io_local
+from prysit import constants
+from prysit import sanitize
 
 
 def predict(data, d_model):
     # check for mandatory keys
     x = io_local.get_array(data, d_model["config"]["x"])
 
-    keras.backend.set_session(d_model["session"])
+    tf.compat.v1.keras.backend.set_session(d_model["session"])
     with d_model["graph"].as_default():
         prediction = d_model["model"].predict(
             x, verbose=True, batch_size=constants.PRED_BATCH_SIZE

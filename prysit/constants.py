@@ -1,7 +1,19 @@
-DATA_PATH = "/root/data.hdf5"
-MODEL_SPECTRA = "/root/model_spectra/"
-MODEL_IRT = "/root/model_irt/"
-OUT_DIR = "/root/prediction/"
+'''
+This file modified by Kevin Kovalchik
+'''
+
+from pathlib import Path
+import os
+
+PRYSIT_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = str(Path(PRYSIT_DIR, 'models'))
+
+#DATA_PATH = "/root/data.hdf5"
+MODEL_TRYPTIC_SPECTRA_DIR = str(Path(MODEL_DIR, 'tryptic', 'prosit1'))
+MODEL_NONTRYPTIC_CID_SPECTRA_DIR = str(Path(MODEL_DIR, 'non-tryptic', 'hla_cid'))
+MODEL_NONTRYPTIC_HCD_SPECTRA_DIR = str(Path(MODEL_DIR, 'non-tryptic', 'hla_hcd'))
+MODEL_IRT_DIR = str(Path(MODEL_DIR, 'irt', 'model_irt_prediction'))
+#OUT_DIR = "/root/prediction/"
 
 VAL_SPLIT = 0.8
 

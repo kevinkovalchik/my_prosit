@@ -1,12 +1,16 @@
 import os
 import yaml
 
-from . import constants
-from . import layers
-from . import utils
+from prysit import constants
+from prysit import layers
+from prysit import utils
+import tensorflow as tf
 
 
-MODEL_NAME = "model.yml"
+if tf.test.is_gpu_available():
+    MODEL_NAME = "model-gpu.yml"
+else:
+    MODEL_NAME = "model-cpu.yml"
 CONFIG_NAME = "config.yml"
 
 

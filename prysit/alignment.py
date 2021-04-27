@@ -1,6 +1,6 @@
 import numpy
 
-from . import tensorize
+from prysit import tensorize
 
 ACE_RANGE = list(range(18, 40, 1))
 

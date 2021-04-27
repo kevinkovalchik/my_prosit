@@ -1,7 +1,11 @@
+'''
+This file modified by Kevin Kovalchik
+'''
+
 import numpy
 import functools
-from .constants import *
-from . import losses
+from prysit.constants import *
+from prysit import losses
 
 
 def reshape_dims(array):

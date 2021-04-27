@@ -1,12 +1,18 @@
+'''
+This file modified by Kevin Kovalchik. Added "single" function.
+'''
+
 import collections
 import numpy as np
+import pandas as pd
+from typing import List, Union
 
-from . import constants
-from . import utils
-from . import match
-from . import annotate
-from . import sanitize
-from .constants import (
+from prysit import constants
+from prysit import utils
+from prysit import match
+from prysit import annotate
+from prysit import sanitize
+from prysit.constants import (
     CHARGES,
     MAX_SEQUENCE,
     ALPHABET,
@@ -107,3 +113,27 @@ def csv(df):
     data["masses_pred"] = masses_pred
 
     return data
+
+
+def single(modified_sequence: str, collision_energy: float, precursor_charge: int):
+    df = pd.DataFrame(data=[[modified_sequence, collision_energy, precursor_charge]],
+                      columns=['modified_sequence', 'collision_energy', 'precursor_charge'])
+    return csv(df)
+
+
+def general_input(modified_sequences: Union[List[str], str],
+                  collision_energies: Union[List[float], float],
+                  precursor_charges: Union[List[int], int]):
+    if isinstance(modified_sequences, str):
+        modified_sequences = [modified_sequences]
+    if isinstance(collision_energies, (float, int)):
+        collision_energies = [collision_energies] * len(modified_sequences)
+    if isinstance(precursor_charges, (float, int)):
+        precursor_charges = [precursor_charges] * len(modified_sequences)
+
+    rows = [[modified_sequences[x], collision_energies[x], precursor_charges[x]]
+            for x in range(len(modified_sequences))]
+
+    df = pd.DataFrame(data=rows,
+                      columns=['modified_sequence', 'collision_energy', 'precursor_charge'])
+    return csv(df)

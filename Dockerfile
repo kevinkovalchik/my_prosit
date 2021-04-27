@@ -6,6 +6,6 @@ ENV TF_CPP_MIN_LOG_LEVEL=3
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-ADD prosit/ /root/prosit
+ADD prysit/ /root/prosit
 RUN cd /root/
 WORKDIR /root/
