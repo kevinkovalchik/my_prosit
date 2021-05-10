@@ -17,12 +17,15 @@ Things to do:
    - **changed a few things to use the `compat.v1` stuff**
    - **after the above changes, the server now runs outisde of Docker by invoking `python -m prysit.server`**
    - **made a version of the model.yml files which will work on CPU, so we no longer need GPUs to run it.**
+      - *Note: This doesn't happen automatically, I'm just making a note here. Probably I will add a function that 
+       makes a copy of the model yaml files and then modifies them appropriately, and then the correct model 
+       will be chosen automatically or indicated by the user.*
 2. Predictions seem to be made from within the server. At least, there are some variables that only get defined
 in the the `__main__` section of server.py.
    - I need to instantiate things outside of server.py. Possibly we need a class object to store the 
    instantiated predictor.
    - **Wrote a `Predictor` class which compiles the needed tf graphs. Had to add some functions to `tensorize.py`
-   and `convert`. You can make predictions programmatically using the `Predictor` class.**
+   and `convert`. You can now make predictions programmatically using the `Predictor` class.**
 
 New things added so far:
 - Added a `download_models` function to utils.py which downloads and extracts the Prosit models into a "models"
